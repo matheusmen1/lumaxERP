@@ -1,0 +1,431 @@
+openapi: 3.0.3
+info:
+  title: LumaxERP API
+  description: Documentação das rotas do sistema de gestão LumaxERP (Loja de Baterias).
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor Local
+
+tags:
+  - name: Produto
+  - name: Cliente
+  - name: Fornecedor
+  - name: Usuário
+  - name: Categoria
+  - name: Tipo Despesa
+  - name: Tipo Pagamento
+
+paths:
+  # ==========================================
+  # TEMPLATE: CLIENTE
+  # ==========================================
+  /apis/cliente:
+    get:
+      tags: [Cliente]
+      summary: Lista todos os clientes
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Cliente Encontrado
+    post:
+      tags: [Cliente]
+      summary: Cadastra um novo cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+      responses:
+        '200':
+          description: Cliente salvo com sucesso
+        '400':
+          description: Erro ao Gravar Cliente
+    put:
+      tags: [Cliente]
+      summary: Atualiza um cliente existente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+      responses:
+        '200':
+          description: Cliente atualizado com sucesso
+        '400':
+          description: Erro ao Alterar Cliente
+
+  /apis/cliente/{id}:
+    get:
+      tags: [Cliente]
+      summary: Busca um cliente pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Cliente Não Encontrado
+    delete:
+      tags: [Cliente]
+      summary: Remove um cliente pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cliente removido com sucesso
+        '400':
+          description: Erro ao Apagar Cliente
+
+  # ==========================================
+  # TEMPLATE: PRODUTO
+  # ==========================================
+  /apis/produto:
+    get:
+      tags: [Produto]
+      summary: Lista todos os produtos
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Produto Encontrado
+    post:
+      tags: [Produto]
+      summary: Cadastra um novo produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Produto'
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Erro ao Gravar Produto
+    put:
+      tags: [Produto]
+      summary: Atualiza um produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Produto'
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Erro ao Alterar Produto
+
+  /apis/produto/{id}:
+    get:
+      tags: [Produto]
+      summary: Busca um produto pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Produto Não Encontrado
+    delete:
+      tags: [Produto]
+      summary: Remove um produto pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Erro ao Apagar Produto
+
+  # ==========================================
+  # TEMPLATE: FORNECEDOR
+  # ==========================================
+  /apis/fornecedor:
+    get:
+      tags: [Fornecedor]
+      summary: Lista todos os fornecedores
+      responses:
+        '200':
+          description: Sucesso
+    post:
+      tags: [Fornecedor]
+      summary: Cadastra fornecedor
+      responses:
+        '200':
+          description: Sucesso
+    put:
+      tags: [Fornecedor]
+      summary: Atualiza fornecedor
+      responses:
+        '200':
+          description: Sucesso
+  /apis/fornecedor/{id}:
+    get:
+      tags: [Fornecedor]
+      summary: Busca fornecedor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+    delete:
+      tags: [Fornecedor]
+      summary: Apaga fornecedor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+
+  # ==========================================
+  # TEMPLATE: USUARIO
+  # ==========================================
+  /apis/usuario:
+    get:
+      tags: [Usuário]
+      summary: Lista todos os usuários
+      responses:
+        '200':
+          description: Sucesso
+    post:
+      tags: [Usuário]
+      summary: Cadastra usuário
+      responses:
+        '200':
+          description: Sucesso
+    put:
+      tags: [Usuário]
+      summary: Atualiza usuário
+      responses:
+        '200':
+          description: Sucesso
+  /apis/usuario/{id}:
+    get:
+      tags: [Usuário]
+      summary: Busca usuário
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+    delete:
+      tags: [Usuário]
+      summary: Apaga usuário
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+
+  # ==========================================
+  # TEMPLATE: CATEGORIA
+  # ==========================================
+  /apis/categoria:
+    get:
+      tags: [Categoria]
+      summary: Lista categorias
+      responses:
+        '200':
+          description: Sucesso
+    post:
+      tags: [Categoria]
+      summary: Cadastra categoria
+      responses:
+        '200':
+          description: Sucesso
+    put:
+      tags: [Categoria]
+      summary: Atualiza categoria
+      responses:
+        '200':
+          description: Sucesso
+  /apis/categoria/{id}:
+    get:
+      tags: [Categoria]
+      summary: Busca categoria
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+    delete:
+      tags: [Categoria]
+      summary: Apaga categoria
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+
+  # ==========================================
+  # TEMPLATE: TIPO DESPESA
+  # ==========================================
+  /apis/tipo-despesa:
+    get:
+      tags: [Tipo Despesa]
+      summary: Lista tipos de despesa
+      responses:
+        '200':
+          description: Sucesso
+    post:
+      tags: [Tipo Despesa]
+      summary: Cadastra tipo de despesa
+      responses:
+        '200':
+          description: Sucesso
+    put:
+      tags: [Tipo Despesa]
+      summary: Atualiza tipo de despesa
+      responses:
+        '200':
+          description: Sucesso
+  /apis/tipo-despesa/{id}:
+    get:
+      tags: [Tipo Despesa]
+      summary: Busca tipo de despesa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+    delete:
+      tags: [Tipo Despesa]
+      summary: Apaga tipo de despesa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+
+  # ==========================================
+  # TEMPLATE: TIPO PAGAMENTO
+  # ==========================================
+  /apis/tipo-pagamento:
+    get:
+      tags: [Tipo Pagamento]
+      summary: Lista tipos de pagamento
+      responses:
+        '200':
+          description: Sucesso
+    post:
+      tags: [Tipo Pagamento]
+      summary: Cadastra tipo de pagamento
+      responses:
+        '200':
+          description: Sucesso
+    put:
+      tags: [Tipo Pagamento]
+      summary: Atualiza tipo de pagamento
+      responses:
+        '200':
+          description: Sucesso
+  /apis/tipo-pagamento/{id}:
+    get:
+      tags: [Tipo Pagamento]
+      summary: Busca tipo de pagamento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+    delete:
+      tags: [Tipo Pagamento]
+      summary: Apaga tipo de pagamento
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+
+components:
+  schemas:
+    Cliente:
+      type: object
+      properties:
+        nome: { type: string }
+        cpf: { type: string }
+        telefone: { type: string }
+        email: { type: string }
+        endereco: { type: string }
+        cidade: { type: string }
+        cep: { type: string }
+        numero: { type: integer }
+        estado: { type: string }
+        bairro: { type: string }
+    Produto:
+      type: object
+      properties:
+        nome: { type: string }
+        descricao: { type: string }
+        valor: { type: number }
+        valorCasco: { type: number }
+        categoria:
+          type: object
+          properties:
+            id: { type: integer }
+        fornecedor:
+          type: object
+          properties:
+            id: { type: integer }
