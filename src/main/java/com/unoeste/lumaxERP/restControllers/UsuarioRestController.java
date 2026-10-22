@@ -1,5 +1,6 @@
 package com.unoeste.lumaxERP.restControllers;
 
+import com.unoeste.lumaxERP.DTO.Acesso;
 import com.unoeste.lumaxERP.entities.Erro;
 import com.unoeste.lumaxERP.entities.Usuario;
 import com.unoeste.lumaxERP.services.UsuarioService;
@@ -19,6 +20,15 @@ public class UsuarioRestController {
     @GetMapping
     public ResponseEntity<Object> getAll() {
         List<Usuario> list = service.getAll();
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Usuário Encontrado"));
+    }
+
+    @GetMapping("/filtro/{filtro}")
+    public ResponseEntity<Object> getByFiltro(@PathVariable("filtro") String filtro) {
+        List<Usuario> list = service.getByFiltro(filtro);
         if (!list.isEmpty())
             return ResponseEntity.ok().body(list);
         else

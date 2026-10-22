@@ -25,6 +25,10 @@ public class TipoDespesaService {
         return repository.findAll();
     }
 
+    public List<TipoDespesa> getByFiltro(String filtro) {
+        return repository.getByFiltro(filtro);
+    }
+
     public TipoDespesa getById(Long id) {
         return repository.findById(id).orElse(null);
     }

@@ -25,6 +25,10 @@ public class ClienteService {
         return repository.findAll();
     }
 
+    public List<Cliente> getByFiltro(String filtro) {
+        return repository.getByFiltro(filtro);
+    }
+
     public Cliente getById(Long id) {
         return repository.findById(id).orElse(null);
     }

@@ -25,6 +25,15 @@ public class TipoDespesaRestController {
             return ResponseEntity.badRequest().body(new Erro("Nenhum Tipo de Despesa Encontrado"));
     }
 
+    @GetMapping("/filtro/{filtro}")
+    public ResponseEntity<Object> getByFiltro(@PathVariable("filtro") String filtro) {
+        List<TipoDespesa> list = service.getByFiltro(filtro);
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Tipo de Despesa Encontrado"));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
         TipoDespesa entity = service.getById(id);

@@ -25,6 +25,15 @@ public class FornecedorRestController {
             return ResponseEntity.badRequest().body(new Erro("Nenhum Fornecedor Encontrado"));
     }
 
+    @GetMapping("/filtro/{filtro}")
+    public ResponseEntity<Object> getByFiltro(@PathVariable("filtro") String filtro) {
+        List<Fornecedor> list = service.getByFiltro(filtro);
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Fornecedor Encontrado"));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
         Fornecedor entity = service.getById(id);

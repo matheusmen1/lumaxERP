@@ -25,6 +25,10 @@ public class CategoriaService {
         return repository.findAll();
     }
 
+    public List<Categoria> getByFiltro(String filtro) {
+        return repository.getByFiltro(filtro);
+    }
+
     public Categoria getById(Long id) {
         return repository.findById(id).orElse(null);
     }

@@ -25,6 +25,15 @@ public class ClienteRestController {
             return ResponseEntity.badRequest().body(new Erro("Nenhum Cliente Encontrado"));
     }
 
+    @GetMapping("/filtro/{filtro}")
+    public ResponseEntity<Object> getByFiltro(@PathVariable("filtro") String filtro) {
+        List<Cliente> list = service.getByFiltro(filtro);
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Cliente Encontrado"));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
         Cliente entity = service.getById(id);

@@ -25,6 +25,15 @@ public class TipoPagamentoRestController {
             return ResponseEntity.badRequest().body(new Erro("Nenhum Tipo de Pagamento Encontrado"));
     }
 
+    @GetMapping("/filtro/{filtro}")
+    public ResponseEntity<Object> getByFiltro(@PathVariable("filtro") String filtro) {
+        List<TipoPagamento> list = service.getByFiltro(filtro);
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Tipo de Pagamento Encontrado"));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
         TipoPagamento entity = service.getById(id);

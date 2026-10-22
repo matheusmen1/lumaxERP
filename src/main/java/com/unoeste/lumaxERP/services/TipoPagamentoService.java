@@ -25,6 +25,10 @@ public class TipoPagamentoService {
         return repository.findAll();
     }
 
+    public List<TipoPagamento> getByFiltro(String filtro) {
+        return repository.getByFiltro(filtro);
+    }
+
     public TipoPagamento getById(Long id) {
         return repository.findById(id).orElse(null);
     }

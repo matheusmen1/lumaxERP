@@ -25,6 +25,15 @@ public class CategoriaRestController {
             return ResponseEntity.badRequest().body(new Erro("Nenhum Categoria Encontrado"));
     }
 
+    @GetMapping("/filtro/{filtro}")
+    public ResponseEntity<Object> getByFiltro(@PathVariable("filtro") String filtro) {
+        List<Categoria> list = service.getByFiltro(filtro);
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Categoria Encontrado"));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
         Categoria entity = service.getById(id);

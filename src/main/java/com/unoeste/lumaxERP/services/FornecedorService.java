@@ -25,6 +25,10 @@ public class FornecedorService {
         return repository.findAll();
     }
 
+    public List<Fornecedor> getByFiltro(String filtro) {
+        return repository.getByFiltro(filtro);
+    }
+
     public Fornecedor getById(Long id) {
         return repository.findById(id).orElse(null);
     }

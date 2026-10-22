@@ -29,6 +29,11 @@ public class ProdutoService
         return produtoRepository.findAll();
     }
 
+    public List<Produto> getByFiltro(String filtro)
+    {
+        return produtoRepository.getByFiltro(filtro);
+    }
+
     public Produto getById(Long id)
     {
         return produtoRepository.findById(id).orElse(null);

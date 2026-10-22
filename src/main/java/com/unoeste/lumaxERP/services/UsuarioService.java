@@ -1,7 +1,9 @@
 package com.unoeste.lumaxERP.services;
 
+import com.unoeste.lumaxERP.DTO.Acesso;
 import com.unoeste.lumaxERP.entities.Usuario;
 import com.unoeste.lumaxERP.repositories.UsuarioRepository;
+import com.unoeste.lumaxERP.security.JWTTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,10 @@ public class UsuarioService {
         return repository.findAll();
     }
 
+    public List<Usuario> getByFiltro(String filtro) {
+        return repository.getByFiltro(filtro);
+    }
+
     public Usuario getById(Long id) {
         return repository.findById(id).orElse(null);
     }
@@ -41,5 +47,17 @@ public class UsuarioService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public String autenticar(Acesso acesso)
+    {
+        Usuario usuario = repository.getUsuarioByEmail(acesso.getEmail());
+        String token = null;
+        if (usuario != null && usuario.getSenha().equals(acesso.getSenha()))
+        {
+            token = JWTTokenProvider.getToken(usuario.getEmail(), usuario.getNivel(), usuario.getId());
+        }
+        return token;
+
     }
 }
