@@ -1,6 +1,5 @@
 package com.unoeste.lumaxERP.restControllers;
 
-import com.unoeste.lumaxERP.DTO.Acesso;
 import com.unoeste.lumaxERP.entities.Erro;
 import com.unoeste.lumaxERP.entities.Usuario;
 import com.unoeste.lumaxERP.services.UsuarioService;
@@ -33,6 +32,15 @@ public class UsuarioRestController {
             return ResponseEntity.ok().body(list);
         else
             return ResponseEntity.badRequest().body(new Erro("Nenhum Usuário Encontrado"));
+    }
+
+    @GetMapping("/nivel/{nivel}")
+    public ResponseEntity<Object> getByNivel(@PathVariable("nivel") Integer nivel) {
+        List<Usuario> list = service.getByNivel(nivel);
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Usuário Encontrado com este Nível"));
     }
 
     @GetMapping("/{id}")

@@ -29,6 +29,16 @@ public class AccessFilter implements Filter {
             String path = req.getRequestURI();
             String metodo = req.getMethod();
 
+            // exclusao de vendas e entradas de estoque apenas para administradores (nivel 1)
+            if (metodo.equals("DELETE")
+                    && (path.startsWith("/apis/venda") || path.startsWith("/apis/entrada-estoque"))
+                    && (nivel == null || nivel != 1))
+            {
+                ((HttpServletResponse)response).setStatus(403);
+                response.getOutputStream().write("Não autorizado ".getBytes());
+                return;
+            }
+
             if (path.startsWith("/apis/usuario") && (nivel == null || nivel != 1)) // acesso aos usuarios apenas para os adm (nivel 1)
             {
                 if (metodo.equals("GET") && !path.matches("/apis/usuario/\\d+"))

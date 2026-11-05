@@ -31,6 +31,10 @@ public class UsuarioService {
         return repository.getByFiltro(filtro);
     }
 
+    public List<Usuario> getByNivel(Integer nivel) {
+        return repository.getByNivel(nivel);
+    }
+
     public Usuario getById(Long id) {
         return repository.findById(id).orElse(null);
     }
@@ -49,15 +53,12 @@ public class UsuarioService {
         }
     }
 
-    public String autenticar(Acesso acesso)
-    {
+    public String autenticar(Acesso acesso) {
         Usuario usuario = repository.getUsuarioByEmail(acesso.getEmail());
         String token = null;
-        if (usuario != null && usuario.getSenha().equals(acesso.getSenha()))
-        {
+        if (usuario != null && usuario.getSenha().equals(acesso.getSenha())) {
             token = JWTTokenProvider.getToken(usuario.getEmail(), usuario.getNivel(), usuario.getId());
         }
         return token;
-
     }
 }

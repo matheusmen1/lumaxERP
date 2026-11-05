@@ -29,6 +29,10 @@ public class FornecedorService {
         return repository.getByFiltro(filtro);
     }
 
+    public Fornecedor getByCnpj(String cnpj) {
+        return repository.getByCnpj(cnpj);
+    }
+
     public Fornecedor getById(Long id) {
         return repository.findById(id).orElse(null);
     }

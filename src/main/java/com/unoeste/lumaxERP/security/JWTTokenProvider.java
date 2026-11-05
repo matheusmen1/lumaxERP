@@ -23,7 +23,7 @@ public class JWTTokenProvider {
             .claim("nivel", nivel)
             .claim("id", id)
             .setIssuedAt(new Date())
-            .setExpiration(Date.from(LocalDateTime.now().plusMinutes(15L)
+            .setExpiration(Date.from(LocalDateTime.now().plusMinutes(45L)
                 .atZone(ZoneId.systemDefault()).toInstant()))
             .signWith(CHAVE)
             .compact();
@@ -42,6 +42,14 @@ public class JWTTokenProvider {
                 System.out.println(e);
        }
        return false;       
+    }
+
+    static public Long getUsuarioIdFromToken(String token)
+    {
+        Claims claims = getAllClaimsFromToken(token);
+        if (claims == null || claims.get("id") == null)
+            return null;
+        return ((Number) claims.get("id")).longValue();
     }
 
     static public Claims getAllClaimsFromToken(String token) 

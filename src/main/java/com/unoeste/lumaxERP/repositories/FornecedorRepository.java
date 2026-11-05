@@ -13,4 +13,7 @@ public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
 
     @Query(value = "SELECT * FROM fornecedor WHERE for_razao_social ILIKE CONCAT('%', :filtro, '%') OR for_cnpj ILIKE CONCAT('%', :filtro, '%') OR for_email ILIKE CONCAT('%', :filtro, '%')", nativeQuery = true)
     public List<Fornecedor> getByFiltro(@Param("filtro") String filtro);
+
+    @Query(value = "SELECT * FROM fornecedor WHERE for_cnpj = :cnpj", nativeQuery = true)
+    public Fornecedor getByCnpj(@Param("cnpj") String cnpj);
 }

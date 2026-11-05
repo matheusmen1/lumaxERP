@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS produto (
      cat_id BIGINT NOT NULL,
      for_id BIGINT NOT NULL,
      prod_valor_casco NUMERIC(10, 2),
+     prod_estoque INTEGER NOT NULL DEFAULT 0,
+     CONSTRAINT ck_produto_estoque CHECK (prod_estoque >= 0),
      CONSTRAINT fk_produto_categoria
          FOREIGN KEY (cat_id)
             REFERENCES categoria (cat_id),
@@ -155,3 +157,4 @@ CREATE TABLE IF NOT EXISTS item_entrada_estoque (
         FOREIGN KEY (prod_id)
             REFERENCES produto(prod_id)
 );
+

@@ -8,49 +8,52 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProdutoService
-{
+public class ProdutoService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
 
     public Produto save(Produto produto) {
-        try
-        {
+        try {
             return produtoRepository.save(produto);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public List<Produto> getAll()
-    {
+    public List<Produto> getAll() {
         return produtoRepository.findAll();
     }
 
-    public List<Produto> getByFiltro(String filtro)
-    {
+    public List<Produto> getByFiltro(String filtro) {
         return produtoRepository.getByFiltro(filtro);
     }
 
-    public Produto getById(Long id)
-    {
+    public List<Produto> getByFornecedor(Long fornecedorId) {
+        return produtoRepository.getByFornecedor(fornecedorId);
+    }
+
+    public List<Produto> getByCategoria(Long categoriaId) {
+        return produtoRepository.getByCategoria(categoriaId);
+    }
+
+    public List<Produto> getDisponiveis() {
+        return produtoRepository.getDisponiveis();
+    }
+
+    public Produto getById(Long id) {
         return produtoRepository.findById(id).orElse(null);
     }
 
-    public boolean delete(Long id)
-    {
-        try{
-         Produto produto = produtoRepository.findById(id).orElse(null);
-         if (produto != null)
-         {
-             produtoRepository.delete(produto);
-             return true;
-         }
-        return false;
-        }catch (Exception e)
-        {
+    public boolean delete(Long id) {
+        try {
+            Produto produto = produtoRepository.findById(id).orElse(null);
+            if (produto != null) {
+                produtoRepository.delete(produto);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

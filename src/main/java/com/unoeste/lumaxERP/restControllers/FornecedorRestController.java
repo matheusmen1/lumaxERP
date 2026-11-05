@@ -34,6 +34,15 @@ public class FornecedorRestController {
             return ResponseEntity.badRequest().body(new Erro("Nenhum Fornecedor Encontrado"));
     }
 
+    @GetMapping("/cnpj/{cnpj}")
+    public ResponseEntity<Object> getByCnpj(@PathVariable("cnpj") String cnpj) {
+        Fornecedor entity = service.getByCnpj(cnpj);
+        if (entity != null)
+            return ResponseEntity.ok().body(entity);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Fornecedor Não Encontrado com este CNPJ"));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
         Fornecedor entity = service.getById(id);

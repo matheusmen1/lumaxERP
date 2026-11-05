@@ -26,6 +26,9 @@ public class Produto
     @Column(name = "prod_valor_casco")
     private Double valorCasco;
 
+    @Column(name = "prod_estoque", insertable = false, updatable = false)
+    private Integer estoque;
+
     @ManyToOne
     @JoinColumn(name = "cat_id", nullable = false)
     private Categoria categoria;
@@ -95,6 +98,14 @@ public class Produto
 
     public void setValorCasco(Double valorCasco) {
         this.valorCasco = valorCasco;
+    }
+
+    public Integer getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(Integer estoque) {
+        this.estoque = estoque;
     }
 
     public Categoria getCategoria() {

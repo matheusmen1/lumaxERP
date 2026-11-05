@@ -34,6 +34,24 @@ public class ClienteRestController {
             return ResponseEntity.badRequest().body(new Erro("Nenhum Cliente Encontrado"));
     }
 
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<Object> getByCpf(@PathVariable("cpf") String cpf) {
+        Cliente entity = service.getByCpf(cpf);
+        if (entity != null)
+            return ResponseEntity.ok().body(entity);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Cliente Não Encontrado com este CPF"));
+    }
+
+    @GetMapping("/cidade/{cidade}")
+    public ResponseEntity<Object> getByCidade(@PathVariable("cidade") String cidade) {
+        List<Cliente> list = service.getByCidade(cidade);
+        if (!list.isEmpty())
+            return ResponseEntity.ok().body(list);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Nenhum Cliente Encontrado nesta Cidade"));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
         Cliente entity = service.getById(id);

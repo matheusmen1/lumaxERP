@@ -29,6 +29,14 @@ public class ClienteService {
         return repository.getByFiltro(filtro);
     }
 
+    public Cliente getByCpf(String cpf) {
+        return repository.getByCpf(cpf);
+    }
+
+    public List<Cliente> getByCidade(String cidade) {
+        return repository.getByCidade(cidade);
+    }
+
     public Cliente getById(Long id) {
         return repository.findById(id).orElse(null);
     }

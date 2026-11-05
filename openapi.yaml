@@ -15,6 +15,8 @@ tags:
   - name: Categoria
   - name: Tipo Despesa
   - name: Tipo Pagamento
+  - name: Venda
+  - name: Entrada Estoque
 
 paths:
   # ==========================================
@@ -128,6 +130,48 @@ paths:
           description: Sucesso
         '400':
           description: Erro ao Alterar Produto
+
+  /apis/produto/fornecedor/{id}:
+    get:
+      tags: [Produto]
+      summary: Lista produtos de um fornecedor específico
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Produto Encontrado para este Fornecedor
+
+  /apis/produto/categoria/{id}:
+    get:
+      tags: [Produto]
+      summary: Lista produtos de uma categoria específica
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Produto Encontrado para esta Categoria
+
+  /apis/produto/disponiveis:
+    get:
+      tags: [Produto]
+      summary: Lista apenas os produtos que possuem estoque disponível (> 0)
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Produto com Estoque Disponível
 
   /apis/produto/{id}:
     get:
@@ -399,6 +443,199 @@ paths:
         '200':
           description: Sucesso
 
+  # ==========================================
+  # VENDA (baixa estoque; vendedor vem do token JWT)
+  # ==========================================
+  /apis/venda:
+    get:
+      tags: [Venda]
+      summary: Lista as vendas (mais recentes primeiro)
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhuma Venda Encontrada
+    post:
+      tags: [Venda]
+      summary: Registra uma venda e baixa o estoque (transação única)
+      description: >
+        O vendedor é obtido do token JWT. O valor unitário vem do cadastro do produto;
+        com casco entregue, desconta o valor do casco. Item com número de série exige quantidade 1.
+        Retorna 400 com "Estoque insuficiente ..." se não houver saldo.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendaRequest'
+      responses:
+        '200':
+          description: Venda registrada
+        '400':
+          description: Regra de negócio violada (ex.: estoque insuficiente)
+  /apis/venda/filtro/{filtro}:
+    get:
+      tags: [Venda]
+      summary: Busca vendas pelo nome ou CPF do cliente
+      parameters:
+        - in: path
+          name: filtro
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhuma Venda Encontrada
+  /apis/venda/cliente/{id}:
+    get:
+      tags: [Venda]
+      summary: Busca vendas de um cliente específico
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhuma Venda Encontrada para este Cliente
+  /apis/venda/usuario/{id}:
+    get:
+      tags: [Venda]
+      summary: Busca vendas de um vendedor específico
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhuma Venda Encontrada para este Vendedor
+  /apis/venda/{id}:
+    get:
+      tags: [Venda]
+      summary: Busca uma venda pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Venda Não Encontrada
+    delete:
+      tags: [Venda]
+      summary: Exclui a venda e devolve os itens ao estoque (somente administrador)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '403':
+          description: Não autorizado (nível diferente de administrador)
+
+  # ==========================================
+  # ENTRADA DE ESTOQUE (soma ao estoque; responsável vem do token JWT)
+  # ==========================================
+  /apis/entrada-estoque:
+    get:
+      tags: [Entrada Estoque]
+      summary: Lista as entradas de estoque (mais recentes primeiro)
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhuma Entrada de Estoque Encontrada
+    post:
+      tags: [Entrada Estoque]
+      summary: Registra uma entrada de mercadoria e soma ao estoque (transação única)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntradaEstoqueRequest'
+      responses:
+        '200':
+          description: Entrada registrada
+        '400':
+          description: Regra de negócio violada
+  /apis/entrada-estoque/filtro/{filtro}:
+    get:
+      tags: [Entrada Estoque]
+      summary: Busca entradas pela razão social ou CNPJ do fornecedor
+      parameters:
+        - in: path
+          name: filtro
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhuma Entrada de Estoque Encontrada
+  /apis/entrada-estoque/fornecedor/{id}:
+    get:
+      tags: [Entrada Estoque]
+      summary: Busca entradas de um fornecedor específico
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhuma Entrada de Estoque Encontrada para este Fornecedor
+  /apis/entrada-estoque/{id}:
+    get:
+      tags: [Entrada Estoque]
+      summary: Busca uma entrada pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Entrada de Estoque Não Encontrada
+    delete:
+      tags: [Entrada Estoque]
+      summary: Exclui a entrada e retira do estoque (somente administrador; bloqueia se já foi vendida)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Parte do estoque da entrada já foi vendida
+        '403':
+          description: Não autorizado (nível diferente de administrador)
+
 components:
   schemas:
     Cliente:
@@ -421,6 +658,10 @@ components:
         descricao: { type: string }
         valor: { type: number }
         valorCasco: { type: number }
+        estoque:
+          type: integer
+          readOnly: true
+          description: Saldo em estoque. Alterado somente por vendas e entradas de estoque.
         categoria:
           type: object
           properties:
@@ -429,3 +670,34 @@ components:
           type: object
           properties:
             id: { type: integer }
+    VendaRequest:
+      type: object
+      required: [clienteId, tipoPagamentoId, itens]
+      properties:
+        clienteId: { type: integer }
+        tipoPagamentoId: { type: integer }
+        itens:
+          type: array
+          items:
+            type: object
+            required: [produtoId, quantidade]
+            properties:
+              produtoId: { type: integer }
+              quantidade: { type: integer, minimum: 1 }
+              cascoEntregue: { type: boolean }
+              numeroSerie: { type: string, description: Se informado, a quantidade deve ser 1 }
+              mesesGarantia: { type: integer }
+    EntradaEstoqueRequest:
+      type: object
+      required: [fornecedorId, itens]
+      properties:
+        fornecedorId: { type: integer }
+        itens:
+          type: array
+          items:
+            type: object
+            required: [produtoId, quantidade, custoUnitario]
+            properties:
+              produtoId: { type: integer }
+              quantidade: { type: integer, minimum: 1 }
+              custoUnitario: { type: number }

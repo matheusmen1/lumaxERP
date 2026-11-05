@@ -11,9 +11,12 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    @Query(value = "SELECT * FROM usuario WHERE usu_email = :email" , nativeQuery = true)
+    @Query(value = "SELECT * FROM usuario WHERE usu_email = :email", nativeQuery = true)
     public Usuario getUsuarioByEmail(@Param("email") String email);
 
     @Query(value = "SELECT * FROM usuario WHERE usu_nome ILIKE CONCAT('%', :filtro, '%') OR usu_email ILIKE CONCAT('%', :filtro, '%')", nativeQuery = true)
     public List<Usuario> getByFiltro(@Param("filtro") String filtro);
+
+    @Query(value = "SELECT * FROM usuario WHERE usu_nivel = :nivel ORDER BY usu_nome", nativeQuery = true)
+    public List<Usuario> getByNivel(@Param("nivel") Integer nivel);
 }
