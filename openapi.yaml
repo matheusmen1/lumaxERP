@@ -17,6 +17,7 @@ tags:
   - name: Tipo Pagamento
   - name: Venda
   - name: Entrada Estoque
+  - name: Lançamento
 
 paths:
   # ==========================================
@@ -636,6 +637,136 @@ paths:
         '403':
           description: Não autorizado (nível diferente de administrador)
 
+  # ==========================================
+  # TEMPLATE: LANÇAMENTO DE DESPESA
+  # ==========================================
+  /apis/lancamento:
+    get:
+      tags: [Lançamento]
+      summary: Lista todos os lançamentos de despesa ordenados por data decrescente
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Lançamento Encontrado
+    post:
+      tags: [Lançamento]
+      summary: Registra um novo lançamento de despesa (o usuário responsável é obtido do token JWT)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LancamentoRequest'
+      responses:
+        '200':
+          description: Lançamento registrado com sucesso
+        '400':
+          description: Erro ao registrar lançamento
+    put:
+      tags: [Lançamento]
+      summary: Atualiza um lançamento de despesa existente
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LancamentoRequest'
+      responses:
+        '200':
+          description: Lançamento atualizado com sucesso
+        '400':
+          description: Erro ao atualizar lançamento
+  /apis/lancamento/filtro/{filtro}:
+    get:
+      tags: [Lançamento]
+      summary: Busca lançamentos por tipo de despesa ou observação via consulta nativa (@Query)
+      parameters:
+        - in: path
+          name: filtro
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Lançamento Encontrado
+  /apis/lancamento/tipo-despesa/{id}:
+    get:
+      tags: [Lançamento]
+      summary: Busca lançamentos por tipo de despesa específico via consulta nativa (@Query)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Lançamento Encontrado para este Tipo de Despesa
+  /apis/lancamento/usuario/{id}:
+    get:
+      tags: [Lançamento]
+      summary: Busca lançamentos por usuário responsável via consulta nativa (@Query)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Nenhum Lançamento Encontrado para este Usuário
+  /apis/lancamento/{id}:
+    get:
+      tags: [Lançamento]
+      summary: Busca lançamento pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Lançamento Não Encontrado
+    delete:
+      tags: [Lançamento]
+      summary: Exclui o lançamento de despesa (somente administrador)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lançamento excluído com sucesso
+        '400':
+          description: Lançamento Não Encontrado
+        '403':
+          description: Não autorizado (nível diferente de administrador)
+  /apis/lancamento/total:
+    get:
+      tags: [Lançamento]
+      summary: Retorna a soma de todas as despesas lançadas
+      responses:
+        '200':
+          description: Sucesso
+
 components:
   schemas:
     Cliente:
@@ -701,3 +832,29 @@ components:
               produtoId: { type: integer }
               quantidade: { type: integer, minimum: 1 }
               custoUnitario: { type: number }
+    LancamentoRequest:
+      type: object
+      required: [tipoDespesaId, valorTotal]
+      properties:
+        id: { type: integer }
+        tipoDespesaId: { type: integer }
+        valorTotal: { type: number, minimum: 0.01 }
+        observacao: { type: string, maxLength: 100 }
+        dataHora: { type: string, format: date-time }
+    Lancamento:
+      type: object
+      properties:
+        id: { type: integer }
+        dataHora: { type: string, format: date-time }
+        valorTotal: { type: number }
+        observacao: { type: string }
+        usuario:
+          type: object
+          properties:
+            id: { type: integer }
+            nome: { type: string }
+        tipoDespesa:
+          type: object
+          properties:
+            id: { type: integer }
+            nome: { type: string }

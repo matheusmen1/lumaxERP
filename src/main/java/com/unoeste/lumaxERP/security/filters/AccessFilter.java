@@ -29,9 +29,9 @@ public class AccessFilter implements Filter {
             String path = req.getRequestURI();
             String metodo = req.getMethod();
 
-            // exclusao de vendas e entradas de estoque apenas para administradores (nivel 1)
+            // exclusao de vendas, entradas de estoque e lancamentos apenas para administradores (nivel 1)
             if (metodo.equals("DELETE")
-                    && (path.startsWith("/apis/venda") || path.startsWith("/apis/entrada-estoque"))
+                    && (path.startsWith("/apis/venda") || path.startsWith("/apis/entrada-estoque") || path.startsWith("/apis/lancamento"))
                     && (nivel == null || nivel != 1))
             {
                 ((HttpServletResponse)response).setStatus(403);
@@ -63,5 +63,3 @@ public class AccessFilter implements Filter {
         }
     }
 }
-
-    
