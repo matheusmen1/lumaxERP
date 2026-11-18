@@ -39,7 +39,15 @@ public class AccessFilter implements Filter {
                 return;
             }
 
-            if (path.startsWith("/apis/usuario") && (nivel == null || nivel != 1)) // acesso aos usuarios apenas para os adm (nivel 1)
+            // relatorios (funcoes de saida da ERS) apenas para administradores (nivel 1)
+            if (path.startsWith("/apis/relatorio") && (nivel == null || nivel != 1))
+            {
+                ((HttpServletResponse)response).setStatus(403);
+                response.getOutputStream().write("Não autorizado ".getBytes());
+                return;
+            }
+
+            if (path.startsWith("/apis/usuario") &&(nivel == null || nivel != 1)) // acesso aos usuarios apenas para os adm (nivel 1)
             {
                 if (metodo.equals("GET") && !path.matches("/apis/usuario/\\d+"))
                 {

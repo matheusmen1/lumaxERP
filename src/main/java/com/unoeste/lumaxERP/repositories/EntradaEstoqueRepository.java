@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,6 @@ public interface EntradaEstoqueRepository extends JpaRepository<EntradaEstoque, 
 
     @Query(value = "SELECT * FROM entrada_estoque WHERE for_id = :fornecedorId ORDER BY ete_data_entrada DESC", nativeQuery = true)
     public List<EntradaEstoque> getByFornecedor(@Param("fornecedorId") Long fornecedorId);
+
+    public List<EntradaEstoque> findByDataEntradaBetweenOrderByDataEntradaDesc(LocalDateTime inicio, LocalDateTime fim);
 }
